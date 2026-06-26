@@ -215,6 +215,8 @@ def carregar_idioma_bot() -> str:
                 dados = json.load(f)
                 if dados.get("idioma") in ("en", "pt"):
                     return dados["idioma"]
+        except json.JSONDecodeError:
+            logger.info("bot_language.json is empty or invalid, using default language.")
         except Exception as err:
             logger.error(f"Error loading bot language: {err}", exc_info=True)
     return "en"
@@ -249,6 +251,8 @@ def carregar_configs() -> dict:
         try:
             with open(CONFIG_FILE, "r", encoding="utf-8") as f:
                 return json.load(f)
+        except json.JSONDecodeError:
+            logger.info("configs_usuarios.json is empty or invalid, starting with no saved configs.")
         except Exception as err:
             logger.error(f"Error loading user configs: {err}", exc_info=True)
     return {}
@@ -373,9 +377,12 @@ def tocar_proximo_da_fila(guild_id: int, connection: discord.VoiceClient) -> Non
     logger.info(f"Playing queued audio in server {guild_id}")
     connection.play(fonte, after=apos_tocar)
 
+
+# ---------------------------------------------------------------------------
 # Admin terminal: runs on a separate thread reading what you type into the
 # console, in parallel with the bot. This is Dun's own admin tool, kept in
 # Portuguese on purpose (separate from the Discord-facing bot commands above).
+# ---------------------------------------------------------------------------
 
 AJUDA_TERMINAL = (
     "Comandos do terminal:\n"

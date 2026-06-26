@@ -22,7 +22,7 @@ DISCORD_TOKEN=your_token_here
 
 3. Run the bot:
 ```
-python bot.py
+iniciar_bot.bat
 ```
 
 No need to install ffmpeg separately, it's bundled with one of the dependencies.

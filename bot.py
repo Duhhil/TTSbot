@@ -1,6 +1,7 @@
 """
 TTS Bot - Discord text-to-speech bot
 Made by Dunhill
+Discord: Duhill
 """
 
 import os

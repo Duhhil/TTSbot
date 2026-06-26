@@ -1,6 +1,7 @@
 # TTS Bot
 
 Made by Dunhill.
+Discord: Duhill
 
 Discord bot that converts text to speech and plays it in the voice channel. Built in Python, using the Google Translate voice (gTTS).
 

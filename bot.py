@@ -1,3 +1,8 @@
+"""
+TTS Bot - Discord text-to-speech bot
+Made by Dunhill
+"""
+
 import os
 import json
 import time
@@ -58,6 +63,19 @@ console_handler.setFormatter(formatter)
 
 logger.addHandler(file_handler)
 logger.addHandler(console_handler)
+
+# discord.py has its own internal logger, which by default uses a different
+# format and prints routine connection details straight to the console. We
+# route it through the same file/format as our own log, but keep the console
+# clean by only showing warnings or worse from it.
+discord_logger = logging.getLogger("discord")
+discord_logger.setLevel(logging.INFO)
+discord_logger.addHandler(file_handler)
+
+discord_console_handler = logging.StreamHandler()
+discord_console_handler.setLevel(logging.WARNING)
+discord_console_handler.setFormatter(formatter)
+discord_logger.addHandler(discord_console_handler)
 
 # Default voice (Google Translate, female, pt-BR), default speed, volume and name announcement
 PADRAO = {
@@ -482,6 +500,14 @@ def thread_terminal() -> None:
             print(f"Comando '{entrada}' não reconhecido. Digite 'ajuda' pra ver a lista.")
 
 
+def imprimir_banner() -> None:
+    largura = 44
+    print("=" * largura)
+    print(" TTS Bot - by Dunhill")
+    print(f" Connected as: {bot.user}")
+    print("=" * largura)
+
+
 @bot.event
 async def on_ready():
     global _terminal_iniciado
@@ -489,6 +515,7 @@ async def on_ready():
 
     if not _terminal_iniciado:
         _terminal_iniciado = True
+        imprimir_banner()
         threading.Thread(target=thread_terminal, daemon=True).start()
 
 
@@ -726,7 +753,7 @@ async def on_message(message: discord.Message):
 
 
 try:
-    bot.run(os.getenv("DISCORD_TOKEN"))
+    bot.run(os.getenv("DISCORD_TOKEN"), log_handler=None)
 except Exception as err:
     # If the bot crashes for good (not a normal Ctrl+C), the reason gets
     # logged, which helps understand what happened when the .bat restarts it.

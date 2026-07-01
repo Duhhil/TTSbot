@@ -1,6 +1,5 @@
 .env
  
-# Gerado automaticamente pelo bot, nao precisa versionar
 audios/
 logs/
 configs_usuarios.json
